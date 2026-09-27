@@ -28,7 +28,7 @@ jobs:
     # GitHub Pages site. Only the app-builder branch deploys, and
     # enabling Pages is done once via the repo's Pages settings
     # (app-builder attempts it automatically at scaffold time).
-    if: github.ref == 'refs/heads/app-builder/app-mujpynjb'
+    if: github.ref == 'refs/heads/app-builder/app-mujxech9'
     runs-on: ubuntu-latest
     permissions:
       pages: write
