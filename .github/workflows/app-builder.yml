@@ -1,0 +1,53 @@
+# Managed by VegaDūta app-builder.
+#
+# Build and test for this app run HERE, on this repository's own
+# GitHub Actions minutes — not on the VegaDūta platform. If a
+# `pages` job is present it publishes a free preview to this repo's
+# GitHub Pages site. Edit or delete this file freely; app-builder
+# only writes it once, when the project is first scaffolded.
+name: app-builder checks
+
+on:
+  push:
+    branches: ["**"]
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    container: node:20-bookworm
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install
+        run: npm install
+      - name: Build
+        run: npm run build
+
+  pages:
+    # Free preview: publishes the built app to this repository's own
+    # GitHub Pages site. Only the app-builder branch deploys, and
+    # enabling Pages is done once via the repo's Pages settings
+    # (app-builder attempts it automatically at scaffold time).
+    if: github.ref == 'refs/heads/app-builder/app-mujpynjb'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install
+        run: npm install
+      - name: Build
+        run: npm run build
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+      - id: deployment
+        uses: actions/deploy-pages@v4
