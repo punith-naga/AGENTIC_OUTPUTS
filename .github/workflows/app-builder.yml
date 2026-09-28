@@ -15,39 +15,12 @@ on:
 jobs:
   check:
     runs-on: ubuntu-latest
-    container: node:20-bookworm
+    container: python:3.12-slim
     steps:
       - uses: actions/checkout@v4
       - name: Install
-        run: npm install
+        run: pip install -r requirements.txt
       - name: Build
-        run: npm run build
-
-  pages:
-    # Free preview: publishes the built app to this repository's own
-    # GitHub Pages site. Only the app-builder branch deploys, and
-    # enabling Pages is done once via the repo's Pages settings
-    # (app-builder attempts it automatically at scaffold time).
-    if: github.ref == 'refs/heads/app-builder/app-mujpynjb'
-    runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - name: Install
-        run: npm install
-      - name: Build
-        run: npm run build
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: dist
-      - id: deployment
-        uses: actions/deploy-pages@v4
+        run: python -c "import main"
+      - name: Test
+        run: python -c "import main" && echo ok
